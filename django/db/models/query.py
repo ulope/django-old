@@ -518,8 +518,8 @@ class QuerySet(object):
         Returns a list of datetime objects representing all available dates for
         the given field_name, scoped to 'kind'.
         """
-        assert kind in ("month", "year", "day"), \
-                "'kind' must be one of 'year', 'month' or 'day'."
+        assert kind in ("month", "year", "day", "hour", "minute"), \
+                "'kind' must be one of 'year', 'month', 'day', 'hour' or 'minute'."
         assert order in ('ASC', 'DESC'), \
                 "'order' must be either 'ASC' or 'DESC'."
         return self._clone(klass=DateQuerySet, setup=True,
