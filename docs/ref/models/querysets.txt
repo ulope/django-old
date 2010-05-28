@@ -502,13 +502,15 @@ kind within the contents of the ``QuerySet``.
 ``field`` should be the name of a ``DateField`` or ``DateTimeField`` of your
 model.
 
-``kind`` should be either ``"year"``, ``"month"`` or ``"day"``. Each
-``datetime.datetime`` object in the result list is "truncated" to the given
-``type``.
+``kind`` should be either ``"year"``, ``"month"``, ``"day"``, ``"hour"`` or 
+``"minute"``. Each ``datetime.datetime`` object in the result list is 
+"truncated" to the given ``type``.
 
     * ``"year"`` returns a list of all distinct year values for the field.
     * ``"month"`` returns a list of all distinct year/month values for the field.
     * ``"day"`` returns a list of all distinct year/month/day values for the field.
+    * ``"hour"`` returns a list of all distinct year/month/day/hour values for the field.
+    * ``"minute"`` returns a list of all distinct year/month/day/hour/minute values for the field.
 
 ``order``, which defaults to ``'ASC'``, should be either ``'ASC'`` or
 ``'DESC'``. This specifies how to order the results.
@@ -523,6 +525,10 @@ Examples::
     [datetime.datetime(2005, 2, 20), datetime.datetime(2005, 3, 20)]
     >>> Entry.objects.dates('pub_date', 'day', order='DESC')
     [datetime.datetime(2005, 3, 20), datetime.datetime(2005, 2, 20)]
+    >>> Entry.objects.dates('pub_date', 'hour', order='DESC')
+    [datetime.datetime(2005, 3, 20, 10), datetime.datetime(2005, 2, 20, 12)]
+    >>> Entry.objects.dates('pub_date', 'minute', order='DESC')
+    [datetime.datetime(2005, 3, 20, 10, 30), datetime.datetime(2005, 2, 20, 12, 45)]
     >>> Entry.objects.filter(headline__contains='Lennon').dates('pub_date', 'day')
     [datetime.datetime(2005, 3, 20)]
 
