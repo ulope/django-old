@@ -1,0 +1,10 @@
+[
+    {
+        "pk": "1",
+        "model": "basic.article",
+        "fields": {
+            "headline": "Do DateQuerySets dream of electric sheep?",
+            "pub_date": "2010-05-28 10:15:30"
+        }
+    }
+]

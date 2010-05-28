@@ -234,7 +234,7 @@ FieldDoesNotExist: Article has no field named 'invalid_field'
 >>> Article.objects.dates('pub_date', 'bad_kind')
 Traceback (most recent call last):
    ...
-AssertionError: 'kind' must be one of 'year', 'month' or 'day'.
+AssertionError: 'kind' must be one of 'year', 'month', 'day', 'hour' or 'minute'.
 
 >>> Article.objects.dates('pub_date', 'year', order='bad order')
 Traceback (most recent call last):
