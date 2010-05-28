@@ -238,7 +238,11 @@ def _sqlite_date_trunc(lookup_type, dt):
         return "%i-%02i-01 00:00:00" % (dt.year, dt.month)
     elif lookup_type == 'day':
         return "%i-%02i-%02i 00:00:00" % (dt.year, dt.month, dt.day)
-
+    elif lookup_type == 'hour':
+        return "%i-%02i-%02i %02i:00:00" % (dt.year, dt.month, dt.day, dt.hour)
+    elif lookup_type == 'minute':
+        return "%i-%02i-%02i %02i:%02i:00" % (dt.year, dt.month, dt.day, dt.hour, dt.minute)
+    
 def _sqlite_regexp(re_pattern, re_string):
     import re
     try:
