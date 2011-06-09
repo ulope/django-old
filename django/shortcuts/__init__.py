@@ -10,6 +10,7 @@ from django.http import HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.db.models.manager import Manager
 from django.db.models.query import QuerySet
 from django.core import urlresolvers
+from django.utils.url import resolve_url
 
 def render_to_response(*args, **kwargs):
     """
@@ -66,23 +67,7 @@ def redirect(to, *args, **kwargs):
     else:
         redirect_class = HttpResponseRedirect
 
-    # If it's a model, use get_absolute_url()
-    if hasattr(to, 'get_absolute_url'):
-        return redirect_class(to.get_absolute_url())
-
-    # Next try a reverse URL resolution.
-    try:
-        return redirect_class(urlresolvers.reverse(to, args=args, kwargs=kwargs))
-    except urlresolvers.NoReverseMatch:
-        # If this is a callable, re-raise.
-        if callable(to):
-            raise
-        # If this doesn't "feel" like a URL, re-raise.
-        if '/' not in to and '.' not in to:
-            raise
-
-    # Finally, fall back and assume it's a URL
-    return redirect_class(to)
+    return redirect_class(resolve_url(to, *args, **kwargs))
 
 def _get_queryset(klass):
     """

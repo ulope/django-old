@@ -113,7 +113,7 @@ def setup(verbosity, test_labels):
     settings.TEMPLATE_DIRS = (os.path.join(os.path.dirname(__file__), TEST_TEMPLATE_DIR),)
     settings.USE_I18N = True
     settings.LANGUAGE_CODE = 'en'
-    settings.LOGIN_URL = '/accounts/login/'
+    settings.LOGIN_URL = 'django.contrib.auth.views.login'
     settings.MIDDLEWARE_CLASSES = (
         'django.contrib.sessions.middleware.SessionMiddleware',
         'django.contrib.auth.middleware.AuthenticationMiddleware',

@@ -6,6 +6,7 @@ from django.http import HttpResponseRedirect, QueryDict
 from django.template.response import TemplateResponse
 from django.utils.http import base36_to_int
 from django.utils.translation import ugettext as _
+from django.utils.url import resolve_url
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
@@ -34,16 +35,16 @@ def login(request, template_name='registration/login.html',
     if request.method == "POST":
         form = authentication_form(data=request.POST)
         if form.is_valid():
-            netloc = urlparse.urlparse(redirect_to)[1]
-
             # Use default setting if redirect_to is empty
             if not redirect_to:
                 redirect_to = settings.LOGIN_REDIRECT_URL
+            redirect_to = resolve_url(redirect_to)
 
+            netloc = urlparse.urlparse(redirect_to)[1]
             # Heavier security check -- don't allow redirection to a different
             # host.
-            elif netloc and netloc != request.get_host():
-                redirect_to = settings.LOGIN_REDIRECT_URL
+            if netloc and netloc != request.get_host():
+                redirect_to = resolve_url(settings.LOGIN_REDIRECT_URL)
 
             # Okay, security checks complete. Log the user in.
             auth_login(request, form.get_user())
@@ -106,6 +107,7 @@ def logout_then_login(request, login_url=None, current_app=None, extra_context=N
     """
     if not login_url:
         login_url = settings.LOGIN_URL
+    login_url = resolve_url(login_url)
     return logout(request, login_url, current_app=current_app, extra_context=extra_context)
 
 def redirect_to_login(next, login_url=None,
@@ -115,6 +117,7 @@ def redirect_to_login(next, login_url=None,
     """
     if not login_url:
         login_url = settings.LOGIN_URL
+    login_url = resolve_url(login_url)
 
     login_url_parts = list(urlparse.urlparse(login_url))
     if redirect_field_name:
@@ -223,7 +226,7 @@ def password_reset_complete(request,
                             template_name='registration/password_reset_complete.html',
                             current_app=None, extra_context=None):
     context = {
-        'login_url': settings.LOGIN_URL
+        'login_url': resolve_url(settings.LOGIN_URL)
     }
     if extra_context is not None:
         context.update(extra_context)
