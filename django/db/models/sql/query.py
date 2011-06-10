@@ -1029,11 +1029,41 @@ class Query(object):
         if not parts:
             raise FieldError("Cannot parse keyword query %r" % arg)
 
-        # Work out the lookup type and remove it from 'parts', if necessary.
-        if len(parts) == 1 or parts[-1] not in self.query_terms:
-            lookup_type = 'exact'
-        else:
-            lookup_type = parts.pop()
+        lookup_type = "exact"
+        model = self.model
+        # walk the relations and figure out the lookup type
+        if len(parts) > 1 and arg not in self.aggregates:
+            for idx, part in enumerate(parts):
+                try:
+                    if part == "pk":
+                        field = model._meta.pk
+                    else:
+                        field, _, _, _ = model._meta.get_field_by_name(part)
+                        if hasattr(field, "model") and field.model != model:
+                            model = field.model
+                            continue
+                        if hasattr(field, "field"):
+                            # RelatedObjects
+                            field = field.field
+                    if field.rel is not None:
+                        model = field.rel.to
+                        continue
+                    # If we reach here we are no longer traversing relations
+                    if idx < len(parts) - 1 and parts[-1] in self.query_terms:
+                        lookup_type = parts.pop()
+                    break
+                except FieldDoesNotExist:
+                    if part in self.aggregates and parts[-1] in self.query_terms:
+                        lookup_type = parts.pop()
+                        break
+                    # if we're not on the last part something is wrong
+                    if idx != len(parts) - 1:
+                        # We can't handle this - fall through
+                        if parts[-1] in self.query_terms:
+                            lookup_type = parts.pop()
+                        break
+                    lookup_type = parts.pop()
+                    break
 
         # By default, this is a WHERE clause. If an aggregate is referenced
         # in the value, the filter will be promoted to a HAVING
