@@ -135,7 +135,6 @@ You may override or customize the default filtering by writing a
 :ref:`custom filter<custom-error-reports>`. Learn more on
 :ref:`Filtering error reports<filtering-error-reports>`.
 
-
 Minor features
 ~~~~~~~~~~~~~~
 
@@ -145,6 +144,12 @@ Django 1.4 also includes several smaller improvements worth noting:
   trace which reference Django's code are dimmed out, while frames in user
   code are slightly emphasized. This change makes it easier to scan a stacktrace
   for issues in user code.
+* The :setting:`LOGIN_URL` and :setting:`LOGIN_REDIRECT_URL` settings now also
+  accept view function names and
+  :ref:`named URL patterns <naming-url-patterns>`. This allows you to reduce
+  configuration duplication. More information can be found in the
+  :func:`~django.contrib.auth.decorators.login_required` documentation.
+
 
 
 .. _backwards-incompatible-changes-1.4:

@@ -1252,6 +1252,14 @@ The URL where requests are redirected after login when the
 This is used by the :func:`~django.contrib.auth.decorators.login_required`
 decorator, for example.
 
+.. versionchanged:: 1.4
+
+This setting now also accepts view function names and
+:ref:`named URL patterns <naming-url-patterns>` which can be used to reduce
+configuration duplication since you no longer have to define the URL in two
+places (``settings`` and URLconf).
+For backward compatibility reasons the default remains unchanged.
+
 .. setting:: LOGIN_URL
 
 LOGIN_URL
@@ -1261,6 +1269,14 @@ Default: ``'/accounts/login/'``
 
 The URL where requests are redirected for login, especially when using the
 :func:`~django.contrib.auth.decorators.login_required` decorator.
+
+.. versionchanged:: 1.4
+
+This setting now also accepts view function names and
+:ref:`named URL patterns <naming-url-patterns>` which can be used to reduce
+configuration duplication since you no longer have to define the URL in two
+places (``settings`` and URLconf).
+For backward compatibility reasons the default remains unchanged.
 
 .. setting:: LOGOUT_URL
 
