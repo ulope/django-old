@@ -26,7 +26,7 @@ class LookupCollisionTests(TestCase):
 
     def test_query_related(self):
         """Test queries through related fields with colliding field names"""
-        self.assertTrue(Appointment.objects.filter(repeating__week_day=datetime(2011, 6, 9)).exists())
+        self.assertTrue(Appointment.objects.filter(repeating__week_day=5).exists())
 
         self.assertTrue(Calendar.objects.filter(appointments__day=datetime(2011, 6, 9)).exists())
         self.assertTrue(Calendar.objects.filter(appointments__repeating__week_day=5).exists())
